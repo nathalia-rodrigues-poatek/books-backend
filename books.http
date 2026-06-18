@@ -1,0 +1,166 @@
+### Books - Book / Genre / Author / Publisher endpoints
+### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
+
+@host = http://localhost:8080
+
+############################################
+### BOOKS
+############################################
+
+### Listar todos os livros (200 — gênero/autor/editora aninhados)
+GET {{host}}/api/books
+Accept: application/json
+
+### Buscar livro por id (200)
+GET {{host}}/api/books/1
+Accept: application/json
+
+### Buscar livro inexistente (404 Not Found)
+GET {{host}}/api/books/9999
+Accept: application/json
+
+### Criar livro (201 — genreId/authorId/publisherId devem existir)
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "name": "Murder on the Orient Express",
+  "genreId": 1,
+  "authorId": 1,
+  "publisherId": 1,
+  "publishedDate": "1934-01-01",
+  "pageCount": 256,
+  "language": "en"
+}
+
+### Criar livro com referência inexistente (404 — genreId não existe)
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "name": "Fantasma",
+  "genreId": 999,
+  "authorId": 1,
+  "publisherId": 1
+}
+
+### Criar livro inválido (400 — name vazio, ids ausentes, pageCount negativo)
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "name": "",
+  "pageCount": -5
+}
+
+### Editar livro (200 — substituição completa)
+PUT {{host}}/api/books/1
+Content-Type: application/json
+
+{
+  "name": "The Hobbit (revised)",
+  "genreId": 1,
+  "authorId": 1,
+  "publisherId": 1,
+  "publishedDate": "1937-09-21",
+  "pageCount": 320,
+  "language": "en"
+}
+
+### Deletar livro (204)
+DELETE {{host}}/api/books/1
+
+############################################
+### GENRES
+############################################
+
+### Listar gêneros (200)
+GET {{host}}/api/genres
+Accept: application/json
+
+### Buscar gênero por id (200)
+GET {{host}}/api/genres/1
+Accept: application/json
+
+### Criar gênero (201)
+POST {{host}}/api/genres
+Content-Type: application/json
+
+{
+  "name": "Mystery"
+}
+
+### Editar gênero (200)
+PUT {{host}}/api/genres/1
+Content-Type: application/json
+
+{
+  "name": "Crime"
+}
+
+### Deletar gênero (204 — ou 409 se ainda referenciado por algum livro)
+DELETE {{host}}/api/genres/1
+
+############################################
+### AUTHORS
+############################################
+
+### Listar autores (200)
+GET {{host}}/api/authors
+Accept: application/json
+
+### Buscar autor por id (200)
+GET {{host}}/api/authors/1
+Accept: application/json
+
+### Criar autor (201)
+POST {{host}}/api/authors
+Content-Type: application/json
+
+{
+  "name": "Agatha Christie"
+}
+
+### Editar autor (200)
+PUT {{host}}/api/authors/1
+Content-Type: application/json
+
+{
+  "name": "J.R.R. Tolkien"
+}
+
+### Deletar autor (204 — ou 409 se ainda referenciado por algum livro)
+DELETE {{host}}/api/authors/1
+
+############################################
+### PUBLISHERS
+############################################
+
+### Listar editoras (200)
+GET {{host}}/api/publishers
+Accept: application/json
+
+### Buscar editora por id (200)
+GET {{host}}/api/publishers/1
+Accept: application/json
+
+### Criar editora (201 — website opcional)
+POST {{host}}/api/publishers
+Content-Type: application/json
+
+{
+  "name": "Collins Crime Club",
+  "website": "https://example.com"
+}
+
+### Editar editora (200)
+PUT {{host}}/api/publishers/1
+Content-Type: application/json
+
+{
+  "name": "Allen & Unwin",
+  "website": "https://www.allenandunwin.com"
+}
+
+### Deletar editora (204 — ou 409 se ainda referenciada por algum livro)
+DELETE {{host}}/api/publishers/1
