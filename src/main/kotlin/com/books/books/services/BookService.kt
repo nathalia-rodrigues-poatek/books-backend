@@ -1,8 +1,7 @@
 package com.books.books.services
 
+import com.books.books.dtos.BookRequest
 import com.books.books.dtos.BookResponse
-import com.books.books.dtos.CreateBookRequest
-import com.books.books.dtos.UpdateBookRequest
 import com.books.books.models.Author
 import com.books.books.models.Book
 import com.books.books.models.Genre
@@ -29,7 +28,7 @@ class BookService(
             .map(BookResponse::from)
             .orElseThrow { BookNotFoundException(id) }
 
-    fun create(request: CreateBookRequest): BookResponse {
+    fun create(request: BookRequest): BookResponse {
         val book = Book(
             name = request.name,
             genre = resolveGenre(request.genreId!!),
@@ -42,7 +41,7 @@ class BookService(
         return BookResponse.from(bookRepository.save(book))
     }
 
-    fun update(id: Long, request: UpdateBookRequest): BookResponse {
+    fun update(id: Long, request: BookRequest): BookResponse {
         val book = bookRepository.findById(id).orElseThrow { BookNotFoundException(id) }
         val updated = book.copy(
             name = request.name,
