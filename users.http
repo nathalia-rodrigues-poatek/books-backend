@@ -1,0 +1,109 @@
+### Books - User endpoints
+### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
+
+@host = http://localhost:8080
+
+### Listar todos os usuários
+GET {{host}}/api/users
+Accept: application/json
+
+### Buscar usuário por id
+GET {{host}}/api/users/1
+Accept: application/json
+
+### Buscar usuário inexistente (404 Not Found)
+GET {{host}}/api/users/9999
+Accept: application/json
+
+### Criar usuário (201 Created)
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Nathalia",
+  "email": "nathalia@poatek.com",
+  "token": "tok-123",
+  "password": "senha123"
+}
+
+### Criar outro usuário
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Fulano",
+  "email": "fulano@poatek.com",
+  "token": "tok-999",
+  "password": "fulano456"
+}
+
+### Tentar criar usuário duplicado (409 Conflict — mesmo email/token)
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Outra",
+  "email": "nathalia@poatek.com",
+  "token": "tok-123",
+  "password": "qualquer"
+}
+
+### Editar usuário (200 — atualiza nome/email; senha opcional)
+PUT {{host}}/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Nathalia Santos",
+  "email": "nathalia.santos@poatek.com",
+  "password": "novasenha123"
+}
+
+### Deletar usuário (204 — soft delete, marca deleted=true)
+DELETE {{host}}/api/users/1
+
+### Restaurar usuário deletado (200 — deleted=false)
+POST {{host}}/api/users/1/restore
+
+### Bloquear usuário (200 — blocked=true)
+POST {{host}}/api/users/1/block
+
+### Desbloquear usuário (200 — blocked=false)
+POST {{host}}/api/users/1/unblock
+
+### Login com sucesso (200 — retorna o token)
+POST {{host}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "nathalia@poatek.com",
+  "password": "senha123"
+}
+
+### Cadastro inválido (400 — email inválido + senha curta + name vazio)
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "nao-eh-email",
+  "token": "tok-xyz",
+  "password": "123"
+}
+
+### Login com senha errada (401 Unauthorized)
+POST {{host}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "nathalia@poatek.com",
+  "password": "errada"
+}
+
+### Login de usuário bloqueado (403 Forbidden — rode após /block)
+POST {{host}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "nathalia@poatek.com",
+  "password": "senha123"
+}
