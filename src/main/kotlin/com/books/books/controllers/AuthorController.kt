@@ -1,8 +1,7 @@
 package com.books.books.controllers
 
+import com.books.books.dtos.AuthorRequest
 import com.books.books.dtos.AuthorResponse
-import com.books.books.dtos.CreateAuthorRequest
-import com.books.books.dtos.UpdateAuthorRequest
 import com.books.books.services.AuthorNotFoundException
 import com.books.books.services.AuthorService
 import jakarta.validation.Valid
@@ -36,13 +35,13 @@ class AuthorController(
         ResponseEntity.ok(authorService.findById(id))
 
     @PostMapping
-    fun createAuthor(@Valid @RequestBody request: CreateAuthorRequest): ResponseEntity<AuthorResponse> =
+    fun createAuthor(@Valid @RequestBody request: AuthorRequest): ResponseEntity<AuthorResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(authorService.create(request))
 
     @PutMapping("/{id}")
     fun updateAuthor(
         @PathVariable id: Long,
-        @Valid @RequestBody request: UpdateAuthorRequest
+        @Valid @RequestBody request: AuthorRequest
     ): ResponseEntity<AuthorResponse> =
         ResponseEntity.ok(authorService.update(id, request))
 

@@ -1,8 +1,7 @@
 package com.books.books.services
 
+import com.books.books.dtos.AuthorRequest
 import com.books.books.dtos.AuthorResponse
-import com.books.books.dtos.CreateAuthorRequest
-import com.books.books.dtos.UpdateAuthorRequest
 import com.books.books.models.Author
 import com.books.books.repositories.AuthorRepository
 import org.springframework.stereotype.Service
@@ -20,10 +19,10 @@ class AuthorService(
             .map(AuthorResponse::from)
             .orElseThrow { AuthorNotFoundException(id) }
 
-    fun create(request: CreateAuthorRequest): AuthorResponse =
+    fun create(request: AuthorRequest): AuthorResponse =
         AuthorResponse.from(authorRepository.save(Author(name = request.name)))
 
-    fun update(id: Long, request: UpdateAuthorRequest): AuthorResponse {
+    fun update(id: Long, request: AuthorRequest): AuthorResponse {
         val author = authorRepository.findById(id).orElseThrow { AuthorNotFoundException(id) }
         return AuthorResponse.from(authorRepository.save(author.copy(name = request.name)))
     }
