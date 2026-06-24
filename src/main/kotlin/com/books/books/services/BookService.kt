@@ -56,6 +56,8 @@ class BookService(
     }
 
     fun delete(id: Long) {
+        // TODO: turn this into a soft delete (flag the row as deleted instead of
+        //  removing it), like the users domain does. Applies to all deletes in the books domain.
         if (!bookRepository.existsById(id)) {
             throw BookNotFoundException(id)
         }

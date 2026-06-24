@@ -1,9 +1,6 @@
 package com.books.books.dtos
 
-import com.books.books.models.Author
 import com.books.books.models.Book
-import com.books.books.models.Genre
-import com.books.books.models.Publisher
 import java.time.LocalDate
 
 /**
@@ -31,34 +28,5 @@ data class BookResponse(
             pageCount = book.pageCount,
             language = book.language
         )
-    }
-}
-
-data class GenreResponse(
-    val id: Long,
-    val name: String
-) {
-    companion object {
-        fun from(genre: Genre) = GenreResponse(id = genre.id, name = genre.name)
-    }
-}
-
-data class AuthorResponse(
-    val id: Long,
-    val name: String
-) {
-    companion object {
-        fun from(author: Author) = AuthorResponse(id = author.id, name = author.name)
-    }
-}
-
-data class PublisherResponse(
-    val id: Long,
-    val name: String,
-    val website: String?
-) {
-    companion object {
-        fun from(publisher: Publisher) =
-            PublisherResponse(id = publisher.id, name = publisher.name, website = publisher.website)
     }
 }

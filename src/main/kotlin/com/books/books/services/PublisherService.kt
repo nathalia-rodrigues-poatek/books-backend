@@ -1,8 +1,7 @@
 package com.books.books.services
 
-import com.books.books.dtos.CreatePublisherRequest
+import com.books.books.dtos.PublisherRequest
 import com.books.books.dtos.PublisherResponse
-import com.books.books.dtos.UpdatePublisherRequest
 import com.books.books.models.Publisher
 import com.books.books.repositories.PublisherRepository
 import org.springframework.stereotype.Service
@@ -20,12 +19,12 @@ class PublisherService(
             .map(PublisherResponse::from)
             .orElseThrow { PublisherNotFoundException(id) }
 
-    fun create(request: CreatePublisherRequest): PublisherResponse =
+    fun create(request: PublisherRequest): PublisherResponse =
         PublisherResponse.from(
             publisherRepository.save(Publisher(name = request.name, website = request.website))
         )
 
-    fun update(id: Long, request: UpdatePublisherRequest): PublisherResponse {
+    fun update(id: Long, request: PublisherRequest): PublisherResponse {
         val publisher = publisherRepository.findById(id).orElseThrow { PublisherNotFoundException(id) }
         return PublisherResponse.from(
             publisherRepository.save(publisher.copy(name = request.name, website = request.website))
@@ -33,6 +32,8 @@ class PublisherService(
     }
 
     fun delete(id: Long) {
+        // TODO: turn this into a soft delete (flag the row as deleted instead of
+        //  removing it), like the users domain does. Applies to all deletes in the books domain.
         if (!publisherRepository.existsById(id)) {
             throw PublisherNotFoundException(id)
         }

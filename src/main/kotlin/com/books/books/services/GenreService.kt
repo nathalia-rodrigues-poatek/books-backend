@@ -1,8 +1,7 @@
 package com.books.books.services
 
-import com.books.books.dtos.CreateGenreRequest
+import com.books.books.dtos.GenreRequest
 import com.books.books.dtos.GenreResponse
-import com.books.books.dtos.UpdateGenreRequest
 import com.books.books.models.Genre
 import com.books.books.repositories.GenreRepository
 import org.springframework.stereotype.Service
@@ -20,15 +19,17 @@ class GenreService(
             .map(GenreResponse::from)
             .orElseThrow { GenreNotFoundException(id) }
 
-    fun create(request: CreateGenreRequest): GenreResponse =
+    fun create(request: GenreRequest): GenreResponse =
         GenreResponse.from(genreRepository.save(Genre(name = request.name)))
 
-    fun update(id: Long, request: UpdateGenreRequest): GenreResponse {
+    fun update(id: Long, request: GenreRequest): GenreResponse {
         val genre = genreRepository.findById(id).orElseThrow { GenreNotFoundException(id) }
         return GenreResponse.from(genreRepository.save(genre.copy(name = request.name)))
     }
 
     fun delete(id: Long) {
+        // TODO: turn this into a soft delete (flag the row as deleted instead of
+        //  removing it), like the users domain does. Applies to all deletes in the books domain.
         if (!genreRepository.existsById(id)) {
             throw GenreNotFoundException(id)
         }

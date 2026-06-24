@@ -1,8 +1,7 @@
 package com.books.books.controllers
 
-import com.books.books.dtos.CreatePublisherRequest
+import com.books.books.dtos.PublisherRequest
 import com.books.books.dtos.PublisherResponse
-import com.books.books.dtos.UpdatePublisherRequest
 import com.books.books.services.PublisherNotFoundException
 import com.books.books.services.PublisherService
 import jakarta.validation.Valid
@@ -36,13 +35,13 @@ class PublisherController(
         ResponseEntity.ok(publisherService.findById(id))
 
     @PostMapping
-    fun createPublisher(@Valid @RequestBody request: CreatePublisherRequest): ResponseEntity<PublisherResponse> =
+    fun createPublisher(@Valid @RequestBody request: PublisherRequest): ResponseEntity<PublisherResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(publisherService.create(request))
 
     @PutMapping("/{id}")
     fun updatePublisher(
         @PathVariable id: Long,
-        @Valid @RequestBody request: UpdatePublisherRequest
+        @Valid @RequestBody request: PublisherRequest
     ): ResponseEntity<PublisherResponse> =
         ResponseEntity.ok(publisherService.update(id, request))
 

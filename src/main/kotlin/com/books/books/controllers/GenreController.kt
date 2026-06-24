@@ -1,8 +1,7 @@
 package com.books.books.controllers
 
-import com.books.books.dtos.CreateGenreRequest
+import com.books.books.dtos.GenreRequest
 import com.books.books.dtos.GenreResponse
-import com.books.books.dtos.UpdateGenreRequest
 import com.books.books.services.GenreNotFoundException
 import com.books.books.services.GenreService
 import jakarta.validation.Valid
@@ -36,13 +35,13 @@ class GenreController(
         ResponseEntity.ok(genreService.findById(id))
 
     @PostMapping
-    fun createGenre(@Valid @RequestBody request: CreateGenreRequest): ResponseEntity<GenreResponse> =
+    fun createGenre(@Valid @RequestBody request: GenreRequest): ResponseEntity<GenreResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(genreService.create(request))
 
     @PutMapping("/{id}")
     fun updateGenre(
         @PathVariable id: Long,
-        @Valid @RequestBody request: UpdateGenreRequest
+        @Valid @RequestBody request: GenreRequest
     ): ResponseEntity<GenreResponse> =
         ResponseEntity.ok(genreService.update(id, request))
 
