@@ -184,6 +184,14 @@ class UserServiceTest {
         verify(userRepository, never()).save(any())
     }
 
+    @Test
+    fun `restore throws when the user does not exist`() {
+        whenever(userRepository.findById(99)).thenReturn(Optional.empty())
+
+        assertThrows(UserNotFoundException::class.java) { service.restore(99) }
+        verify(userRepository, never()).save(any())
+    }
+
     // ---------- block / unblock ----------
 
     @Test
@@ -197,6 +205,25 @@ class UserServiceTest {
         verify(userRepository).save(captor.capture())
         assertTrue(captor.firstValue.blocked)
         assertEquals(true, captor.firstValue.blockedDate != null)
+    }
+
+    @Test
+    fun `block is idempotent for an already-blocked user`() {
+        whenever(userRepository.findByIdAndDeletedFalse(1)).thenReturn(Optional.of(user(id = 1, blocked = true, blockedDate = LocalDateTime.now())))
+
+        service.block(1)
+
+        verify(userRepository, never()).save(any())
+    }
+
+    @Test
+    fun `block and unblock ignore soft-deleted users and throw`() {
+        // block/unblock use findByIdAndDeletedFalse, so a soft-deleted user is treated as absent.
+        whenever(userRepository.findByIdAndDeletedFalse(99)).thenReturn(Optional.empty())
+
+        assertThrows(UserNotFoundException::class.java) { service.block(99) }
+        assertThrows(UserNotFoundException::class.java) { service.unblock(99) }
+        verify(userRepository, never()).save(any())
     }
 
     @Test

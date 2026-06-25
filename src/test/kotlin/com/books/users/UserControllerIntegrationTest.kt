@@ -155,6 +155,20 @@ class UserControllerIntegrationTest @Autowired constructor(
         ).andExpect(status().isNotFound)
     }
 
+    @Test
+    fun `rejects invalid update payload with 400 and field errors`() {
+        val id = createUser()
+        mockMvc.perform(
+            put("/api/users/$id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"name":"","email":"not-an-email","password":"123"}""")
+        )
+            .andExpect(status().isBadRequest)
+            .andExpect(jsonPath("$.errors.name").exists())
+            .andExpect(jsonPath("$.errors.email").exists())
+            .andExpect(jsonPath("$.errors.password").exists())
+    }
+
     // ---------- delete / restore ----------
 
     @Test
@@ -206,6 +220,13 @@ class UserControllerIntegrationTest @Autowired constructor(
             .andExpect(jsonPath("$.blockedDate").doesNotExist())
 
         login("nathalia@poatek.com", "senha123").andExpect(status().isOk)
+    }
+
+    @Test
+    fun `returns 404 when restoring, blocking or unblocking an unknown user`() {
+        mockMvc.perform(post("/api/users/999999/restore")).andExpect(status().isNotFound)
+        mockMvc.perform(post("/api/users/999999/block")).andExpect(status().isNotFound)
+        mockMvc.perform(post("/api/users/999999/unblock")).andExpect(status().isNotFound)
     }
 
     // ---------- login ----------
