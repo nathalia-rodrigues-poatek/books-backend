@@ -1,0 +1,71 @@
+### Books - Book club endpoints
+### Run each request by clicking the ▶ next to "###" (Android Studio / IntelliJ).
+### Create users first (users.http) to use as admin/members.
+
+@host = http://localhost:8080
+
+### List all book clubs
+GET {{host}}/api/book-clubs
+Accept: application/json
+
+### Get a book club by id
+GET {{host}}/api/book-clubs/1
+Accept: application/json
+
+### Create a book club (201) - adminId and visibility are required
+POST {{host}}/api/book-clubs
+Content-Type: application/json
+
+{
+  "name": "Science Fiction Club",
+  "adminId": 1,
+  "memberIds": [1, 2],
+  "image": "https://example.com/sci-fi.png",
+  "description": "Monthly discussions about science fiction classics.",
+  "visibility": "PUBLIC"
+}
+
+### Create a private book club
+POST {{host}}/api/book-clubs
+Content-Type: application/json
+
+{
+  "name": "Secret Club",
+  "adminId": 1,
+  "memberIds": [],
+  "visibility": "PRIVATE"
+}
+
+### Update a book club (200)
+PUT {{host}}/api/book-clubs/1
+Content-Type: application/json
+
+{
+  "name": "Science Fiction Club (updated)",
+  "adminId": 1,
+  "memberIds": [1],
+  "description": "New description.",
+  "visibility": "PRIVATE"
+}
+
+### Create with a non-existent admin (404)
+POST {{host}}/api/book-clubs
+Content-Type: application/json
+
+{
+  "name": "Invalid Club",
+  "adminId": 9999,
+  "visibility": "PUBLIC"
+}
+
+### Invalid create (400 - empty name + missing adminId/visibility)
+POST {{host}}/api/book-clubs
+Content-Type: application/json
+
+{
+  "name": "",
+  "memberIds": []
+}
+
+### Delete a book club (204)
+DELETE {{host}}/api/book-clubs/1
