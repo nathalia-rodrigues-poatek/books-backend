@@ -1,0 +1,82 @@
+### Books - Book club reading endpoints
+### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
+### Pré-requisitos: ter um book club (book-clubs.http) e um book (books.http).
+
+@host = http://localhost:8080
+
+### Listar todas as leituras
+GET {{host}}/api/book-club-readings
+Accept: application/json
+
+### Buscar leitura por id
+GET {{host}}/api/book-club-readings/1
+Accept: application/json
+
+### Criar leitura (201)
+POST {{host}}/api/book-club-readings
+Content-Type: application/json
+
+{
+  "bookClubId": 1,
+  "bookId": 1,
+  "startDate": "2026-07-01",
+  "endDate": "2026-07-31",
+  "meetLink": "https://meet.example.com/sci-fi-julho"
+}
+
+### Mesmo clube lendo OUTRO livro em OUTRO período (201)
+POST {{host}}/api/book-club-readings
+Content-Type: application/json
+
+{
+  "bookClubId": 1,
+  "bookId": 2,
+  "startDate": "2026-08-01",
+  "endDate": "2026-08-31"
+}
+
+### Conflito: mesmo clube + mesmo range de datas (409)
+### -> "you'r book club is already reading a book for these dates"
+POST {{host}}/api/book-club-readings
+Content-Type: application/json
+
+{
+  "bookClubId": 1,
+  "bookId": 2,
+  "startDate": "2026-07-01",
+  "endDate": "2026-07-31"
+}
+
+### Editar leitura (200)
+PUT {{host}}/api/book-club-readings/1
+Content-Type: application/json
+
+{
+  "bookClubId": 1,
+  "bookId": 1,
+  "startDate": "2026-07-01",
+  "endDate": "2026-07-15",
+  "meetLink": "https://meet.example.com/atualizado"
+}
+
+### Criar com book club inexistente (404)
+POST {{host}}/api/book-club-readings
+Content-Type: application/json
+
+{
+  "bookClubId": 9999,
+  "bookId": 1,
+  "startDate": "2026-09-01",
+  "endDate": "2026-09-30"
+}
+
+### Criar inválido (400 — campos obrigatórios ausentes)
+POST {{host}}/api/book-club-readings
+Content-Type: application/json
+
+{
+  "meetLink": "https://meet.example.com/x"
+}
+
+### Deletar leitura (204)
+DELETE {{host}}/api/book-club-readings/1
