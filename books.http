@@ -1,5 +1,5 @@
 ### Books - Book / Genre / Author / Publisher endpoints
-### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
+### Run each request by clicking the ▶ next to "###" (Android Studio / IntelliJ).
 
 @host = http://localhost:8080
 
@@ -7,19 +7,19 @@
 ### BOOKS
 ############################################
 
-### Listar todos os livros (200 — gênero/autor/editora aninhados)
+### List all books (200 - genre/author/publisher nested)
 GET {{host}}/api/books
 Accept: application/json
 
-### Buscar livro por id (200)
+### Get a book by id (200)
 GET {{host}}/api/books/1
 Accept: application/json
 
-### Buscar livro inexistente (404 Not Found)
+### Get a non-existent book (404 Not Found)
 GET {{host}}/api/books/9999
 Accept: application/json
 
-### Criar livro (201 — genreId/authorId/publisherId devem existir)
+### Create a book (201 - genreId/authorId/publisherId must exist)
 POST {{host}}/api/books
 Content-Type: application/json
 
@@ -33,18 +33,18 @@ Content-Type: application/json
   "language": "en"
 }
 
-### Criar livro com referência inexistente (404 — genreId não existe)
+### Create a book with a non-existent reference (404 - genreId does not exist)
 POST {{host}}/api/books
 Content-Type: application/json
 
 {
-  "name": "Fantasma",
+  "name": "Ghost",
   "genreId": 999,
   "authorId": 1,
   "publisherId": 1
 }
 
-### Criar livro inválido (400 — name vazio, ids ausentes, pageCount negativo)
+### Invalid create (400 - empty name, missing ids, negative pageCount)
 POST {{host}}/api/books
 Content-Type: application/json
 
@@ -53,7 +53,7 @@ Content-Type: application/json
   "pageCount": -5
 }
 
-### Editar livro (200 — substituição completa)
+### Update a book (200 - full replacement)
 PUT {{host}}/api/books/1
 Content-Type: application/json
 
@@ -67,22 +67,22 @@ Content-Type: application/json
   "language": "en"
 }
 
-### Deletar livro (204)
+### Delete a book (204)
 DELETE {{host}}/api/books/1
 
 ############################################
 ### GENRES
 ############################################
 
-### Listar gêneros (200)
+### List genres (200)
 GET {{host}}/api/genres
 Accept: application/json
 
-### Buscar gênero por id (200)
+### Get a genre by id (200)
 GET {{host}}/api/genres/1
 Accept: application/json
 
-### Criar gênero (201)
+### Create a genre (201)
 POST {{host}}/api/genres
 Content-Type: application/json
 
@@ -90,7 +90,7 @@ Content-Type: application/json
   "name": "Mystery"
 }
 
-### Editar gênero (200)
+### Update a genre (200)
 PUT {{host}}/api/genres/1
 Content-Type: application/json
 
@@ -98,22 +98,22 @@ Content-Type: application/json
   "name": "Crime"
 }
 
-### Deletar gênero (204 — ou 409 se ainda referenciado por algum livro)
+### Delete a genre (204 - or 409 if still referenced by a book)
 DELETE {{host}}/api/genres/1
 
 ############################################
 ### AUTHORS
 ############################################
 
-### Listar autores (200)
+### List authors (200)
 GET {{host}}/api/authors
 Accept: application/json
 
-### Buscar autor por id (200)
+### Get an author by id (200)
 GET {{host}}/api/authors/1
 Accept: application/json
 
-### Criar autor (201)
+### Create an author (201)
 POST {{host}}/api/authors
 Content-Type: application/json
 
@@ -121,7 +121,7 @@ Content-Type: application/json
   "name": "Agatha Christie"
 }
 
-### Editar autor (200)
+### Update an author (200)
 PUT {{host}}/api/authors/1
 Content-Type: application/json
 
@@ -129,22 +129,22 @@ Content-Type: application/json
   "name": "J.R.R. Tolkien"
 }
 
-### Deletar autor (204 — ou 409 se ainda referenciado por algum livro)
+### Delete an author (204 - or 409 if still referenced by a book)
 DELETE {{host}}/api/authors/1
 
 ############################################
 ### PUBLISHERS
 ############################################
 
-### Listar editoras (200)
+### List publishers (200)
 GET {{host}}/api/publishers
 Accept: application/json
 
-### Buscar editora por id (200)
+### Get a publisher by id (200)
 GET {{host}}/api/publishers/1
 Accept: application/json
 
-### Criar editora (201 — website opcional)
+### Create a publisher (201 - website optional)
 POST {{host}}/api/publishers
 Content-Type: application/json
 
@@ -153,7 +153,7 @@ Content-Type: application/json
   "website": "https://example.com"
 }
 
-### Editar editora (200)
+### Update a publisher (200)
 PUT {{host}}/api/publishers/1
 Content-Type: application/json
 
@@ -162,5 +162,5 @@ Content-Type: application/json
   "website": "https://www.allenandunwin.com"
 }
 
-### Deletar editora (204 — ou 409 se ainda referenciada por algum livro)
+### Delete a publisher (204 - or 409 if still referenced by a book)
 DELETE {{host}}/api/publishers/1

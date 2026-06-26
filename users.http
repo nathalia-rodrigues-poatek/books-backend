@@ -1,21 +1,21 @@
 ### Books - User endpoints
-### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
+### Run each request by clicking the ▶ next to "###" (Android Studio / IntelliJ).
 
 @host = http://localhost:8080
 
-### Listar todos os usuários
+### List all users
 GET {{host}}/api/users
 Accept: application/json
 
-### Buscar usuário por id
+### Get a user by id
 GET {{host}}/api/users/1
 Accept: application/json
 
-### Buscar usuário inexistente (404 Not Found)
+### Get a non-existent user (404 Not Found)
 GET {{host}}/api/users/9999
 Accept: application/json
 
-### Criar usuário (201 Created)
+### Create a user (201 Created)
 POST {{host}}/api/users
 Content-Type: application/json
 
@@ -26,51 +26,51 @@ Content-Type: application/json
   "password": "senha123"
 }
 
-### Criar outro usuário
+### Create another user
 POST {{host}}/api/users
 Content-Type: application/json
 
 {
-  "name": "Fulano",
-  "email": "fulano@poatek.com",
+  "name": "John Doe",
+  "email": "john@poatek.com",
   "token": "tok-999",
-  "password": "fulano456"
+  "password": "johndoe456"
 }
 
-### Tentar criar usuário duplicado (409 Conflict — mesmo email/token)
+### Try to create a duplicate user (409 Conflict - same email/token)
 POST {{host}}/api/users
 Content-Type: application/json
 
 {
-  "name": "Outra",
+  "name": "Someone",
   "email": "nathalia@poatek.com",
   "token": "tok-123",
-  "password": "qualquer"
+  "password": "whatever"
 }
 
-### Editar usuário (200 — atualiza nome/email; senha opcional)
+### Update a user (200 - updates name/email; password optional)
 PUT {{host}}/api/users/1
 Content-Type: application/json
 
 {
   "name": "Nathalia Santos",
   "email": "nathalia.santos@poatek.com",
-  "password": "novasenha123"
+  "password": "newpassword123"
 }
 
-### Deletar usuário (204 — soft delete, marca deleted=true)
+### Delete a user (204 - soft delete, sets deleted=true)
 DELETE {{host}}/api/users/1
 
-### Restaurar usuário deletado (200 — deleted=false)
+### Restore a deleted user (200 - deleted=false)
 POST {{host}}/api/users/1/restore
 
-### Bloquear usuário (200 — blocked=true)
+### Block a user (200 - blocked=true)
 POST {{host}}/api/users/1/block
 
-### Desbloquear usuário (200 — blocked=false)
+### Unblock a user (200 - blocked=false)
 POST {{host}}/api/users/1/unblock
 
-### Login com sucesso (200 — retorna o token)
+### Successful login (200 - returns the token)
 POST {{host}}/api/users/login
 Content-Type: application/json
 
@@ -79,27 +79,27 @@ Content-Type: application/json
   "password": "senha123"
 }
 
-### Cadastro inválido (400 — email inválido + senha curta + name vazio)
+### Invalid sign-up (400 - invalid email + short password + empty name)
 POST {{host}}/api/users
 Content-Type: application/json
 
 {
   "name": "",
-  "email": "nao-eh-email",
+  "email": "not-an-email",
   "token": "tok-xyz",
   "password": "123"
 }
 
-### Login com senha errada (401 Unauthorized)
+### Login with wrong password (401 Unauthorized)
 POST {{host}}/api/users/login
 Content-Type: application/json
 
 {
   "email": "nathalia@poatek.com",
-  "password": "errada"
+  "password": "wrong"
 }
 
-### Login de usuário bloqueado (403 Forbidden — rode após /block)
+### Login of a blocked user (403 Forbidden - run after /block)
 POST {{host}}/api/users/login
 Content-Type: application/json
 
