@@ -1,64 +1,64 @@
 ### Books - Book club endpoints
-### Rode cada request clicando no ▶ ao lado de "###" (Android Studio / IntelliJ).
-### Crie usuários primeiro (users.http) para usar como admin/membros.
+### Run each request by clicking the ▶ next to "###" (Android Studio / IntelliJ).
+### Create users first (users.http) to use as admin/members.
 
 @host = http://localhost:8080
 
-### Listar todos os book clubs
+### List all book clubs
 GET {{host}}/api/book-clubs
 Accept: application/json
 
-### Buscar book club por id
+### Get a book club by id
 GET {{host}}/api/book-clubs/1
 Accept: application/json
 
-### Criar book club (201) — adminId e visibility são obrigatórios
+### Create a book club (201) - adminId and visibility are required
 POST {{host}}/api/book-clubs
 Content-Type: application/json
 
 {
-  "name": "Clube da Ficção Científica",
+  "name": "Science Fiction Club",
   "adminId": 1,
   "memberIds": [1, 2],
   "image": "https://example.com/sci-fi.png",
-  "description": "Discussões mensais sobre clássicos de ficção científica.",
+  "description": "Monthly discussions about science fiction classics.",
   "visibility": "PUBLIC"
 }
 
-### Criar book club privado
+### Create a private book club
 POST {{host}}/api/book-clubs
 Content-Type: application/json
 
 {
-  "name": "Clube Secreto",
+  "name": "Secret Club",
   "adminId": 1,
   "memberIds": [],
   "visibility": "PRIVATE"
 }
 
-### Editar book club (200)
+### Update a book club (200)
 PUT {{host}}/api/book-clubs/1
 Content-Type: application/json
 
 {
-  "name": "Clube da Ficção Científica (atualizado)",
+  "name": "Science Fiction Club (updated)",
   "adminId": 1,
   "memberIds": [1],
-  "description": "Nova descrição.",
+  "description": "New description.",
   "visibility": "PRIVATE"
 }
 
-### Criar com admin inexistente (404)
+### Create with a non-existent admin (404)
 POST {{host}}/api/book-clubs
 Content-Type: application/json
 
 {
-  "name": "Clube Inválido",
+  "name": "Invalid Club",
   "adminId": 9999,
   "visibility": "PUBLIC"
 }
 
-### Criar inválido (400 — name vazio + adminId/visibility ausentes)
+### Invalid create (400 - empty name + missing adminId/visibility)
 POST {{host}}/api/book-clubs
 Content-Type: application/json
 
@@ -67,5 +67,5 @@ Content-Type: application/json
   "memberIds": []
 }
 
-### Deletar book club (204)
+### Delete a book club (204)
 DELETE {{host}}/api/book-clubs/1
