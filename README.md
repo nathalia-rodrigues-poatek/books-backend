@@ -1,6 +1,6 @@
 # books-backend
 
-A small REST API for managing a library of **books** and their **users**, built with Spring Boot and Kotlin. It covers user management with authentication (BCrypt-hashed passwords, soft delete, block/unblock) and a books catalog (books, authors, genres, publishers) seeded from the public [Open Library](https://openlibrary.org) API on startup.
+A small REST API for managing a library of **books** and their **users**, built with Spring Boot and Kotlin. It covers user management with authentication (BCrypt-hashed passwords, soft delete, block/unblock), a books catalog (books, authors, genres, publishers) seeded from the public [Open Library](https://openlibrary.org) API on startup, **book clubs** (groups of users with an admin), and **book club readings** that track the book a club is reading over a date range.
 
 ## Tech stack
 
@@ -76,6 +76,30 @@ A book references an existing genre, author and publisher by id (`genreId`, `aut
 
 Analogous CRUD endpoints are available at `/api/authors`, `/api/genres` and `/api/publishers`.
 
+### Book clubs — `/api/book-clubs`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/book-clubs` | List book clubs |
+| `GET` | `/api/book-clubs/{id}` | Get a book club by id |
+| `POST` | `/api/book-clubs` | Create a book club (201) |
+| `PUT` | `/api/book-clubs/{id}` | Update a book club |
+| `DELETE` | `/api/book-clubs/{id}` | Delete a book club (204) |
+
+A book club has a name, an `admin` user, a list of `members` (users), an optional image and description, and a `visibility` of `PUBLIC` or `PRIVATE`. `adminId` and each `memberId` must reference existing (non-deleted) users.
+
+### Book club readings — `/api/book-club-readings`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/book-club-readings` | List readings |
+| `GET` | `/api/book-club-readings/{id}` | Get a reading by id |
+| `POST` | `/api/book-club-readings` | Create a reading (201) |
+| `PUT` | `/api/book-club-readings/{id}` | Update a reading |
+| `DELETE` | `/api/book-club-readings/{id}` | Delete a reading (204) |
+
+A reading links a book club (`bookClubId`) to a book (`bookId`) over a required `startDate`–`endDate` range, with an optional `meetLink` and `address`. A club can read many books and a book can be read by many clubs, but a club cannot have two readings with the exact same date range (returns `409 Conflict`).
+
 ### Error responses
 
 | Status | When |
@@ -84,7 +108,7 @@ Analogous CRUD endpoints are available at `/api/authors`, `/api/genres` and `/ap
 | `401 Unauthorized` | Invalid login credentials |
 | `403 Forbidden` | Blocked user attempting to log in |
 | `404 Not Found` | Entity (or a referenced entity) not found |
-| `409 Conflict` | Duplicate unique value (e.g. user email/token) |
+| `409 Conflict` | Duplicate unique value (e.g. user email/token) or a book club already reading a book for the same date range |
 
 ### Trying the API
 
@@ -92,6 +116,8 @@ Ready-to-run request collections are in the project root and can be executed fro
 
 - [`users.http`](users.http)
 - [`books.http`](books.http)
+- [`book-clubs.http`](book-clubs.http)
+- [`book-club-readings.http`](book-club-readings.http)
 
 ## Testing
 
@@ -99,7 +125,7 @@ Ready-to-run request collections are in the project root and can be executed fro
 ./gradlew test
 ```
 
-Unit tests mock the repositories (mockito-kotlin) to exercise the service logic in isolation; the user domain additionally has `@SpringBootTest` integration tests driving the controllers via `MockMvc`.
+Every service (users, books, authors, genres, publishers, book clubs and book club readings) has unit tests that mock the repositories (mockito-kotlin) to exercise the logic in isolation; the user domain additionally has `@SpringBootTest` integration tests driving the controllers via `MockMvc`.
 
 ## Project structure
 
@@ -108,8 +134,12 @@ src/main/kotlin/com/books
 ├── config/                 # App-wide config (PasswordConfig)
 ├── users/                  # Users domain
 │   ├── controllers/  dtos/  models/  repositories/  services/
-└── books/                  # Books domain
-    ├── clients/            # OpenLibraryClient
-    ├── config/             # BookDataSeeder
+├── books/                  # Books domain
+│   ├── clients/            # OpenLibraryClient
+│   ├── config/             # BookDataSeeder
+│   ├── controllers/  dtos/  models/  repositories/  services/
+├── bookclubs/              # Book clubs domain
+│   ├── controllers/  dtos/  models/  repositories/  services/
+└── readings/               # Book club readings domain
     ├── controllers/  dtos/  models/  repositories/  services/
 ```
