@@ -5,7 +5,8 @@ import java.time.LocalDate
 
 /**
  * Payload for creating or fully replacing a book club reading. [bookClubId] and
- * [bookId] must reference existing records.
+ * [bookId] must reference existing records. [startDate] and [endDate] are
+ * required; [meetLink] and [address] are optional.
  */
 data class BookClubReadingRequest(
     @field:NotNull(message = "bookClubId is required")
@@ -14,11 +15,11 @@ data class BookClubReadingRequest(
     @field:NotNull(message = "bookId is required")
     val bookId: Long?,
 
-    @field:NotNull(message = "startDate is required")
-    val startDate: LocalDate?,
+    val startDate: LocalDate,
 
-    @field:NotNull(message = "endDate is required")
-    val endDate: LocalDate?,
+    val endDate: LocalDate,
 
-    val meetLink: String? = null
+    val meetLink: String? = null,
+
+    val address: String? = null
 )

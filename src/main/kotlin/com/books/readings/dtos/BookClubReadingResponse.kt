@@ -14,7 +14,8 @@ data class BookClubReadingResponse(
     val book: BookResponse,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val meetLink: String?
+    val meetLink: String?,
+    val address: String?
 ) {
     companion object {
         fun from(reading: BookClubReading) = BookClubReadingResponse(
@@ -23,7 +24,8 @@ data class BookClubReadingResponse(
             book = BookResponse.from(reading.book),
             startDate = reading.startDate,
             endDate = reading.endDate,
-            meetLink = reading.meetLink
+            meetLink = reading.meetLink,
+            address = reading.address
         )
     }
 }

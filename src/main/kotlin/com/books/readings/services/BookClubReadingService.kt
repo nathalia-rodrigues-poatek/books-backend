@@ -31,7 +31,7 @@ class BookClubReadingService(
         val bookClub = resolveBookClub(request.bookClubId!!)
         val book = resolveBook(request.bookId!!)
 
-        if (readingRepository.existsByBookClubIdAndStartDateAndEndDate(bookClub.id, request.startDate!!, request.endDate!!)) {
+        if (readingRepository.existsByBookClubIdAndStartDateAndEndDate(bookClub.id, request.startDate, request.endDate)) {
             throw ReadingDateRangeConflictException()
         }
 
@@ -40,7 +40,8 @@ class BookClubReadingService(
             book = book,
             startDate = request.startDate,
             endDate = request.endDate,
-            meetLink = request.meetLink
+            meetLink = request.meetLink,
+            address = request.address
         )
         return BookClubReadingResponse.from(readingRepository.save(reading))
     }
@@ -50,7 +51,7 @@ class BookClubReadingService(
         val bookClub = resolveBookClub(request.bookClubId!!)
         val book = resolveBook(request.bookId!!)
 
-        if (readingRepository.existsByBookClubIdAndStartDateAndEndDateAndIdNot(bookClub.id, request.startDate!!, request.endDate!!, id)) {
+        if (readingRepository.existsByBookClubIdAndStartDateAndEndDateAndIdNot(bookClub.id, request.startDate, request.endDate, id)) {
             throw ReadingDateRangeConflictException()
         }
 
@@ -59,7 +60,8 @@ class BookClubReadingService(
             book = book,
             startDate = request.startDate,
             endDate = request.endDate,
-            meetLink = request.meetLink
+            meetLink = request.meetLink,
+            address = request.address
         )
         return BookClubReadingResponse.from(readingRepository.save(updated))
     }

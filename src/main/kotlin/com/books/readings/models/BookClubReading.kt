@@ -38,5 +38,8 @@ data class BookClubReading(
     val endDate: LocalDate,
 
     @Column(name = "meet_link")
-    val meetLink: String? = null
+    val meetLink: String? = null,
+
+    @Column(name = "address")
+    val address: String? = null
 )
